@@ -1,7 +1,7 @@
 name: bnx-os
 description: Mon système Fedora Kinoite optimisé avec KineticWE
 base-image: ghcr.io/ublue-os/kinoite-main
-image-version: 40
+image-version: 44
 
 modules:
   - type: rpm-ostree
