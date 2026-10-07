@@ -7,11 +7,9 @@ modules:
   # MODULE 1 : Installation et configuration des dépôts externes
   - type: rpm-ostree
     repos:
-      # Dépôts texte (.repo)
       - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-44/linuxgamerlife-lgl-experimental-fedora-44.repo
       - https://repo.librewolf.net/librewolf.repo
     install:
-      # Dépôts RPM Fusion (requis pour Steam et les codecs multimédia)
       - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
       - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
 
@@ -20,17 +18,16 @@ modules:
     remove:
       - firefox
       - firefox-langpacks
-      - mesa-va-drivers # On retire les pilotes bridés par défaut
+      - mesa-va-drivers
       - libavcodec-free
       - libavdevice-free
       - libavfilter-free
       - libavformat-free
       - libavutil-free
-      - libpostproc-free
+      # (libpostproc-free a été retiré de cette liste car il n'est pas présent par défaut)
       - libswresample-free
       - libswscale-free
     install:
-      # Codecs multimédia complets (provenant de RPM Fusion)
       - mesa-va-drivers-freeworld
       - mesa-vdpau-drivers-freeworld
       - ffmpeg
@@ -39,7 +36,7 @@ modules:
       - gstreamer1-plugins-ugly
       - gstreamer1-vaapi
 
-  # MODULE 3 : Installation des logiciels (maintenant que RPM Fusion est actif et les codecs réglés)
+  # MODULE 3 : Installation des logiciels
   - type: rpm-ostree
     install:
       # Navigateur natif
