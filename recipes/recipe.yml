@@ -1,17 +1,14 @@
 name: bnx-os
 description: Mon système Fedora Kinoite (Pur) optimisé avec KineticWE
-base-image: ghcr.io/ublue-os/kinoite-main
+# L'image officielle de Fedora Kinoite, sans les altérations d'Universal Blue
+base-image: quay.io/fedora-ostree-desktops/kinoite
 image-version: 44
 
 modules:
   - type: rpm-ostree
     repos:
-      # Dépôt KineticWE
+      # Les liens .repo texte vont ici
       - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-44/linuxgamerlife-lgl-experimental-fedora-44.repo
-      # Dépôts RPM Fusion (nécessaires sur la base Kinoite pure pour Steam)
-      - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
-      - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
-      # Dépôt officiel LibreWolf
       - https://repo.librewolf.net/librewolf.repo
     
     remove:
@@ -19,8 +16,9 @@ modules:
       - firefox-langpacks
 
     install:
-      # --- LE CORRECTIF MULTILIB ---
-      - SDL3 # Force la synchronisation des versions 32-bits et 64-bits
+      # Les paquets d'activation RPM Fusion (.rpm) vont ici
+      - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
+      - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
       
       # Navigateur natif
       - librewolf
