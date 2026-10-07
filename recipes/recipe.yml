@@ -1,18 +1,26 @@
 name: bnx-os
-description: Mon système Bazzite optimisé avec KineticWE
-# On utilise l'image Bazzite (KDE) qui a déjà Steam et les optimisations gaming
+description: Mon système Bazzite (Steam natif) avec KineticWE et LibreWolf
 base-image: ghcr.io/ublue-os/bazzite
-image-version: 44
+image-version: stable
 
 modules:
   - type: rpm-ostree
     repos:
-      # L'URL COPR avec la variable %OS_VERSION% (votre excellente syntaxe !)
-      - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-%OS_VERSION%/linuxgamerlife-lgl-experimental-fedora-%OS_VERSION%.repo
+      # Dépôt KineticWE avec la version 44 fixée
+      - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-44/linuxgamerlife-lgl-experimental-fedora-44.repo
+      # Dépôt officiel LibreWolf
+      - https://repo.librewolf.net/librewolf.repo
     
+    remove:
+      # Nettoyage du navigateur par défaut
+      - firefox
+      - firefox-langpacks
+
     install:
-      # On installe UNIQUEMENT vos outils spécifiques.
-      # Steam, gamemode, mangohud et steam-devices sont retirés d'ici car Bazzite les a déjà.
+      # Navigateur natif
+      - librewolf
+      
+      # Environnement et outils CLI
       - kineticwe
       - kitty
       - fish
