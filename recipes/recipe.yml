@@ -1,22 +1,27 @@
 name: bnx-os
-description: Mon système Bazzite (Steam natif) avec KineticWE et LibreWolf
-base-image: ghcr.io/ublue-os/bazzite
-image-version: stable
+description: Mon système Fedora Kinoite (Pur) optimisé avec KineticWE
+base-image: ghcr.io/ublue-os/kinoite-main
+image-version: 44
 
 modules:
   - type: rpm-ostree
     repos:
-      # Dépôt KineticWE avec la version 44 fixée
+      # Dépôt KineticWE
       - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-44/linuxgamerlife-lgl-experimental-fedora-44.repo
+      # Dépôts RPM Fusion (nécessaires sur la base Kinoite pure pour Steam)
+      - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
+      - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
       # Dépôt officiel LibreWolf
       - https://repo.librewolf.net/librewolf.repo
     
     remove:
-      # Nettoyage du navigateur par défaut
       - firefox
       - firefox-langpacks
 
     install:
+      # --- LE CORRECTIF MULTILIB ---
+      - SDL3 # Force la synchronisation des versions 32-bits et 64-bits
+      
       # Navigateur natif
       - librewolf
       
@@ -27,6 +32,12 @@ modules:
       - neovim
       - stow
       - git
+      
+      # Gaming natif et optimisation
+      - steam
+      - gamemode
+      - mangohud
+      - steam-devices
 
   - type: systemd
     system:
