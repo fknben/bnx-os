@@ -1,25 +1,47 @@
 name: bnx-os
 description: Mon système Fedora Kinoite (Pur) optimisé avec KineticWE
-# L'image officielle de Fedora Kinoite, sans les altérations d'Universal Blue
 base-image: quay.io/fedora-ostree-desktops/kinoite
 image-version: 44
 
 modules:
+  # MODULE 1 : Installation et configuration des dépôts externes
   - type: rpm-ostree
     repos:
-      # Les liens .repo texte vont ici
+      # Dépôts texte (.repo)
       - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-44/linuxgamerlife-lgl-experimental-fedora-44.repo
       - https://repo.librewolf.net/librewolf.repo
-    
+    install:
+      # Dépôts RPM Fusion (requis pour Steam et les codecs multimédia)
+      - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
+      - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
+
+  # MODULE 2 : Remplacement des paquets multimédia par défaut par la version complète de RPM Fusion
+  - type: rpm-ostree
     remove:
       - firefox
       - firefox-langpacks
-
+      - mesa-va-drivers # On retire les pilotes bridés par défaut
+      - libavcodec-free
+      - libavdevice-free
+      - libavfilter-free
+      - libavformat-free
+      - libavutil-free
+      - libpostproc-free
+      - libswresample-free
+      - libswscale-free
     install:
-      # Les paquets d'activation RPM Fusion (.rpm) vont ici
-      - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
-      - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
-      
+      # Codecs multimédia complets (provenant de RPM Fusion)
+      - mesa-va-drivers-freeworld
+      - mesa-vdpau-drivers-freeworld
+      - ffmpeg
+      - gstreamer1-plugins-bad-free-extras
+      - gstreamer1-plugins-bad-freeworld
+      - gstreamer1-plugins-ugly
+      - gstreamer1-vaapi
+
+  # MODULE 3 : Installation des logiciels (maintenant que RPM Fusion est actif et les codecs réglés)
+  - type: rpm-ostree
+    install:
       # Navigateur natif
       - librewolf
       
@@ -30,6 +52,12 @@ modules:
       - neovim
       - stow
       - git
+      
+      # Theming et cohérence visuelle GTK/Qt
+      - nwg-look
+      - adw-gtk-theme
+      - qt5ct
+      - qt6ct
       
       # Gaming natif et optimisation
       - steam
