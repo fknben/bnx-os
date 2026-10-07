@@ -6,11 +6,8 @@ image-version: 44
 modules:
   - type: rpm-ostree
     repos:
-      - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-40.noarch.rpm
-      - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-40.noarch.rpm
-      - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-40/linuxgamerlife-lgl-experimental-fedora-40.repo
-
-  - type: rpm-ostree
+      - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-%OS_VERSION%/linuxgamerlife-lgl-experimental-fedora-%OS_VERSION%.repo
+    
     install:
       - kineticwe
       - kitty
