@@ -1,45 +1,43 @@
----
-# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-# image will be published to ghcr.io/<user>/<name>
-name: template
-# description will be included in the image's metadata
-description: This is my personal OS image.
+name: bnx-os
+description: Mon système Fedora Kinoite optimisé avec KineticWE
+base-image: ghcr.io/ublue-os/kinoite-main
+image-version: 40
 
-# the base image to build on top of (FROM) and the version tag to use
-base-image: ghcr.io/ublue-os/silverblue-main
-image-version: latest # You can pin to a specific version of Fedora as well
-
-# module configuration, executed in order
-# you can include multiple instances of the same module
 modules:
-  - type: files
-    files:
-      - source: system
-        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
-
-  - type: dnf
+  # 1. Dépôts requis pour Steam et KineticWE
+  - type: rpm-ostree
     repos:
-      copr:
-        - atim/starship
+      - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-40.noarch.rpm
+      - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-40.noarch.rpm
+    copr:
+      - linuxgamerlife/lgl-experimental
+
+  # 2. Installation de vos paquets
+  - type: rpm-ostree
     install:
-      packages:
-        - micro
-        - starship
-    remove:
-      packages:
-        # example: removing firefox (in favor of the flatpak)
-        # "firefox" is the main package, "firefox-langpacks" is a dependency
-        - firefox
-        - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
+      # Environnement
+      - kineticwe
+      
+      # Base et terminaux (Sans PowerShell, isolé plus tard)
+      - kitty
+      - fish
+      - neovim
+      - stow
+      - git
+      
+      # Gaming et optimisation matérielle
+      - steam
+      - gamemode
+      - mangohud
+      - steam-devices # Requis pour le volant Logitech G923
 
-  - type: default-flatpaks
-    configurations:
-      - notify: true # Send notification after install/uninstall is finished (true/false)
-        scope: system
-        # If no repo information is specified, Flathub will be used by default
-        install: # system flatpaks we want all users to have and not remove
-          - org.mozilla.firefox
-          - org.gnome.Loupe
-      - scope: user # Also add Flathub user repo, but no user packages
+  # 3. Activation des services
+  - type: systemd
+    system:
+      enabled:
+        - docker.service # Prêt pour les services auto-hébergés
 
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
+  # 4. Définir Fish comme shell par défaut
+  - type: script
+    snippets:
+      - "chsh -s /usr/bin/fish"
