@@ -4,40 +4,30 @@ base-image: ghcr.io/ublue-os/kinoite-main
 image-version: 40
 
 modules:
-  # 1. Dépôts requis pour Steam et KineticWE
   - type: rpm-ostree
     repos:
       - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-40.noarch.rpm
       - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-40.noarch.rpm
-    copr:
-      - linuxgamerlife/lgl-experimental
+      - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-40/linuxgamerlife-lgl-experimental-fedora-40.repo
 
-  # 2. Installation de vos paquets
   - type: rpm-ostree
     install:
-      # Environnement
       - kineticwe
-      
-      # Base et terminaux (Sans PowerShell, isolé plus tard)
       - kitty
       - fish
       - neovim
       - stow
       - git
-      
-      # Gaming et optimisation matérielle
       - steam
       - gamemode
       - mangohud
-      - steam-devices # Requis pour le volant Logitech G923
+      - steam-devices
 
-  # 3. Activation des services
   - type: systemd
     system:
       enabled:
-        - docker.service # Prêt pour les services auto-hébergés
+        - docker.service
 
-  # 4. Définir Fish comme shell par défaut
   - type: script
     snippets:
       - "chsh -s /usr/bin/fish"
