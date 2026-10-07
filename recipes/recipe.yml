@@ -15,12 +15,21 @@ modules:
 
   # MODULE 2 : Remplacement des paquets multimédia par la version complète RPM Fusion
   - type: rpm-ostree
-    # Le nettoyage initial des paquets inutiles
+    # Suppression explicite des paquets "bridés" intégrés à l'image de base Kinoite
     remove:
       - firefox
       - firefox-langpacks
       - mesa-va-drivers
-    # Remplacer les codecs bridés de Fedora par les paquets complets de RPM Fusion
+      - ffmpeg-free
+      - libavcodec-free
+      - libavdevice-free
+      - libavfilter-free
+      - libavformat-free
+      - libavutil-free
+      - libpostproc-free
+      - libswresample-free
+      - libswscale-free
+    # Installation des codecs complets et de l'accélération matérielle AMD
     install:
       - mesa-va-drivers-freeworld
       - ffmpeg
