@@ -24,12 +24,11 @@ modules:
       - libavfilter-free
       - libavformat-free
       - libavutil-free
-      # (libpostproc-free a été retiré de cette liste car il n'est pas présent par défaut)
       - libswresample-free
       - libswscale-free
     install:
+      # Codecs multimédia complets
       - mesa-va-drivers-freeworld
-      - mesa-vdpau-drivers-freeworld
       - ffmpeg
       - gstreamer1-plugins-bad-free-extras
       - gstreamer1-plugins-bad-freeworld
