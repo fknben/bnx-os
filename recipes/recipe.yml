@@ -9,13 +9,13 @@ modules:
     repos:
       - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-44/linuxgamerlife-lgl-experimental-fedora-44.repo
       - https://repo.librewolf.net/librewolf.repo
+      # Nouveau dépôt COPR requis pour installer nwg-look
+      - https://copr.fedorainfracloud.org/coprs/tofik/nwg-shell/repo/fedora-44/tofik-nwg-shell-fedora-44.repo
     install:
       - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
       - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
 
   # MODULE 2 : Le nettoyage intelligent via DNF
-  # On garde le swap de ffmpeg qui fonctionne parfaitement.
-  # On retire le swap de mesa-va-drivers qui détruit l'OS à cause du décalage de version RPM Fusion vs Fedora 44.
   - type: script
     snippets:
       - "dnf -y swap ffmpeg-free ffmpeg --allowerasing"
@@ -43,7 +43,7 @@ modules:
       
       # Theming et cohérence visuelle GTK/Qt
       - nwg-look
-      - adw-gtk-theme
+      - adw-gtk3-theme # <-- Correction du nom
       - qt5ct
       - qt6ct
       
