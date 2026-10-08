@@ -9,7 +9,6 @@ modules:
     repos:
       - https://copr.fedorainfracloud.org/coprs/linuxgamerlife/lgl-experimental/repo/fedora-44/linuxgamerlife-lgl-experimental-fedora-44.repo
       - https://repo.librewolf.net/librewolf.repo
-      # Nouveau dépôt COPR requis pour installer nwg-look
       - https://copr.fedorainfracloud.org/coprs/tofik/nwg-shell/repo/fedora-44/tofik-nwg-shell-fedora-44.repo
     install:
       - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
@@ -43,7 +42,7 @@ modules:
       
       # Theming et cohérence visuelle GTK/Qt
       - nwg-look
-      - adw-gtk3-theme # <-- Correction du nom
+      - adw-gtk3-theme
       - qt5ct
       - qt6ct
       
@@ -53,11 +52,12 @@ modules:
       - mangohud
       - steam-devices
 
-  - type: systemd
-    system:
-      enabled:
-        - docker.service
+  # MODULE 4 : Configuration des dépôts Flatpak (Flathub)
+  - type: script
+    snippets:
+      - "flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo"
 
+  # MODULE 5 : Configuration système
   - type: script
     snippets:
       - "chsh -s /usr/bin/fish"
