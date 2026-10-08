@@ -13,32 +13,23 @@ modules:
       - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
       - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
 
-  # MODULE 2 : Remplacement des paquets multimédia par la version complète RPM Fusion
+  # MODULE 2 : Le nettoyage et les codecs (La méthode intelligente)
+  # rpm-ostree est trop rigide pour échanger manuellement les bibliothèques multimédias.
+  # On utilise dnf swap (autorisé lors du build) pour remplacer proprement ffmpeg-free et ses dépendances.
+  - type: script
+    snippets:
+      - "dnf -y swap ffmpeg-free ffmpeg --allowerasing"
+      - "dnf -y swap mesa-va-drivers mesa-va-drivers-freeworld --allowerasing"
+      - "dnf -y remove firefox firefox-langpacks"
+
+  # MODULE 3 : Installation des logiciels et plugins
   - type: rpm-ostree
-    # Suppression explicite et exacte des codecs bridés présents sur Kinoite 44
-    remove:
-      - firefox
-      - firefox-langpacks
-      - mesa-va-drivers
-      - ffmpeg-free
-      - libavcodec-free
-      - libavdevice-free
-      - libavfilter-free
-      - libavformat-free
-      - libavutil-free
-      - libswresample-free
-      - libswscale-free
-    # Installation des codecs complets sans conflit
     install:
-      - mesa-va-drivers-freeworld
-      - ffmpeg
+      # Plugins multimédias additionnels
       - gstreamer1-plugins-bad-free-extras
       - gstreamer1-plugins-bad-freeworld
       - gstreamer1-plugins-ugly
-
-  # MODULE 3 : Installation des logiciels
-  - type: rpm-ostree
-    install:
+      
       # Navigateur natif
       - librewolf
       
