@@ -13,19 +13,19 @@ modules:
       - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
       - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
 
-  # MODULE 2 : Le nettoyage et les codecs (La méthode intelligente)
-  # rpm-ostree est trop rigide pour échanger manuellement les bibliothèques multimédias.
-  # On utilise dnf swap (autorisé lors du build) pour remplacer proprement ffmpeg-free et ses dépendances.
+  # MODULE 2 : Le nettoyage intelligent via DNF
+  # On garde le swap de ffmpeg qui fonctionne parfaitement.
+  # On retire le swap de mesa-va-drivers qui détruit l'OS à cause du décalage de version RPM Fusion vs Fedora 44.
   - type: script
     snippets:
       - "dnf -y swap ffmpeg-free ffmpeg --allowerasing"
-      - "dnf -y swap mesa-va-drivers mesa-va-drivers-freeworld --allowerasing"
       - "dnf -y remove firefox firefox-langpacks"
 
   # MODULE 3 : Installation des logiciels et plugins
   - type: rpm-ostree
     install:
-      # Plugins multimédias additionnels
+      # Pilotes et plugins multimédias additionnels
+      - mesa-va-drivers-freeworld
       - gstreamer1-plugins-bad-free-extras
       - gstreamer1-plugins-bad-freeworld
       - gstreamer1-plugins-ugly
