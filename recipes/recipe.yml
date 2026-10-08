@@ -14,10 +14,16 @@ modules:
       - https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm
       - https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
 
-  # MODULE 2 : Le nettoyage intelligent via DNF
+  # MODULE 2 : Nettoyage et résolution des conflits 32-bits (La clé pour Steam)
   - type: script
     snippets:
+      # Met à jour la base pour éviter le décalage de versions 32/64 bits (ex: nss)
+      - "dnf -y upgrade"
+      # Remplace libcurl-minimal par libcurl complet (requis par Steam 32 bits)
+      - "dnf -y swap libcurl-minimal libcurl --allowerasing"
+      # Remplace la version free de ffmpeg par la version complète (RPM Fusion)
       - "dnf -y swap ffmpeg-free ffmpeg --allowerasing"
+      # Retire Firefox installé par défaut pour utiliser Librewolf
       - "dnf -y remove firefox firefox-langpacks"
 
   # MODULE 3 : Installation des logiciels et plugins
@@ -40,13 +46,17 @@ modules:
       - stow
       - git
       
+      # Moteur Docker natif et Compose
+      - moby-engine
+      - docker-compose
+      
       # Theming et cohérence visuelle GTK/Qt
       - nwg-look
       - adw-gtk3-theme
       - qt5ct
       - qt6ct
       
-      # Gaming natif et optimisation
+      # Gaming natif (Steam RPM)
       - steam
       - gamemode
       - mangohud
@@ -61,3 +71,9 @@ modules:
   - type: script
     snippets:
       - "chsh -s /usr/bin/fish"
+
+  # MODULE 6 : Services au démarrage
+  - type: systemd
+    system:
+      enabled:
+        - docker.service
